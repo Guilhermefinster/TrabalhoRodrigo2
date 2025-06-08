@@ -1,9 +1,15 @@
-import { useEffect, useState } from 'react';
-import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import api from "../services/api";
 import {
-  Container, Typography, List, ListItem, ListItemText, CircularProgress
-} from '@mui/material';
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function PostPage() {
   const [posts, setPosts] = useState([]);
@@ -11,30 +17,49 @@ export default function PostPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/posts')
-      .then(res => {
-        setPosts(res.data);
+    api
+      .get("/posts")
+      .then((response) => {
+        setPosts(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar posts:", error);
         setLoading(false);
       });
   }, []);
 
-  const handleClick = (id) => {
+  const handleViewDetails = (id) => {
     navigate(`/dados/${id}`);
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>Lista de Posts</Typography>
+    <Container sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Lista de Posts
+      </Typography>
+
       {loading ? (
         <CircularProgress />
       ) : (
-        <List>
-          {posts.map(post => (
-            <ListItem button key={post.id} onClick={() => handleClick(post.id)}>
-              <ListItemText primary={post.title} />
-            </ListItem>
+        <Stack spacing={2}>
+          {posts.map((post) => (
+            <Card key={post.id}>
+              <CardContent>
+                <Typography variant="h6">{post.title}</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  {post.body}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => handleViewDetails(post.id)}
+                >
+                  Ver Detalhes
+                </Button>
+              </CardContent>
+            </Card>
           ))}
-        </List>
+        </Stack>
       )}
     </Container>
   );
