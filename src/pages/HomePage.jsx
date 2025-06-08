@@ -5,33 +5,36 @@ import {
   Typography,
   Button,
   TextField,
-  Stack
+  Stack,
 } from '@mui/material';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [postId, setPostId] = useState('');
 
-  const handleNavigatePost = () => {
+  const handleNavigateToPost = () => {
     navigate('/post');
   };
 
-  const handleNavigateDados = () => {
+  const handleNavigateToDados = () => {
     if (postId.trim()) {
       navigate(`/dados/${postId}`);
     }
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>Página Inicial</Typography>
-      <Stack spacing={2} sx={{ maxWidth: 400 }}>
-        <Button variant="contained" onClick={handleNavigatePost}>
-          Ver lista de posts
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Página Inicial
+      </Typography>
+
+      <Stack spacing={2}>
+        <Button variant="contained" onClick={handleNavigateToPost}>
+          Ver Lista de Posts
         </Button>
 
         <TextField
-          label="ID do Post"
+          label="Digite o ID do Post"
           variant="outlined"
           value={postId}
           onChange={(e) => setPostId(e.target.value)}
@@ -39,9 +42,9 @@ export default function HomePage() {
         <Button
           variant="contained"
           color="secondary"
-          onClick={handleNavigateDados}
+          onClick={handleNavigateToDados}
         >
-          Ver detalhes do post
+          Ver Detalhes do Post
         </Button>
       </Stack>
     </Container>
